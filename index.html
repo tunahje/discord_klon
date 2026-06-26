@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Özel Ekip Paneli 🚀</title>
-    <!-- Tasarım için Tailwind CSS kullanıyoruz -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Koyu temaya uygun karanlık kaydırma çubuğu */
@@ -15,21 +14,17 @@
 </head>
 <body class="bg-[#121315] text-gray-300 font-sans flex h-screen overflow-hidden select-none">
 
-    <!-- 1. SOL SÜTUN: SADECE SES KATILIMI VE PROFİL (Koyu Derin Yeşil Tonu) -->
     <div class="w-56 bg-[#141d17] flex flex-col flex-shrink-0 border-r border-[#1f2e24]">
-        <!-- Panel Başlığı -->
         <div class="h-14 border-b border-[#1f2e24] flex items-center px-4 font-bold text-emerald-400 tracking-wide text-sm">
             PORNOCULAR MEYDANI
         </div>
         
-        <!-- Ses Odası Butonu (Koyu Temada Parlayan Neon Mor) -->
         <div class="flex-1 p-3">
             <button class="w-full bg-[#b53fff] hover:bg-[#a00aff] text-white font-bold py-3 px-2 text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-purple-950/50">
                 <span>🔊</span> SESE KATIL
             </button>
         </div>
 
-        <!-- En Alt: Profil Alanı (Tamamen Dikdörtgen ve Karanlık) -->
         <div class="h-16 bg-[#1a241e] flex items-center justify-between px-3 gap-2 border-t border-[#25382b]">
             <div class="flex items-center gap-2 min-w-0">
                 <div class="w-9 h-9 bg-[#3a3a4a] text-sm font-bold text-purple-300 flex items-center justify-center flex-shrink-0">
@@ -41,21 +36,19 @@
                 </div>
             </div>
             <div class="flex items-center gap-1 text-gray-400">
-                <button class="hover:bg-[#25382b] hover:text-white p-1,5 cursor-pointer transition-colors">🎤</button>
+                <button id="mikrofon-kutusu" onclick="mikrofonuKapat()" class="hover:bg-[#25382b] hover:text-white p-1,5 cursor-pointer transition-all duration-150 text-lg">
+                    <span id="mikrofon-icon">🎤</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- 2. SAĞ ALAN: TEK BİR BÜYÜK SOHBET EKRANI (Karanlık Tema) -->
     <div class="flex-1 bg-[#161917] flex flex-col h-full">
-        <!-- Üst Bar -->
         <div class="h-14 border-b border-[#0b0c0d] flex items-center px-5 font-bold text-gray-200 gap-2 flex-shrink-0 bg-[#1e221f]">
             <span>💬 Ortak Sohbet</span>
         </div>
 
-        <!-- Mesaj Akış Alanı -->
         <div id="chat-penceresi" class="flex-1 overflow-y-auto p-5 space-y-4">
-            <!-- Sistem Mesajı (Koyu Temalı Mesaj Kutusu) -->
             <div class="flex items-start gap-4 p-3 bg-[#202422] border border-[#2d3330]">
                 <div class="w-10 h-10 bg-[#333a36] text-emerald-400 font-bold flex items-center justify-center flex-shrink-0">⚙️</div>
                 <div>
@@ -63,49 +56,12 @@
                         <span class="font-bold text-gray-200">Sistem</span>
                         <span class="text-xs text-gray-500">Şimdi</span>
                     </div>
-                    <p class="text-gray-400 text-sm mt-1">Karanlık tema başarıyla yüklendi. Gözleriniz artık güvende.</p>
+                    <p class="text-gray-400 text-sm mt-1">Mikrofon açma/kapatma özelliği arayüze entegre edildi. Sol alttan deneyebilirsin.</p>
                 </div>
             </div>
         </div>
 
-        <!-- En Alt: Mesaj Yazma Kutusu -->
         <div class="p-4 bg-[#1e221f] border-t border-[#2d3330] flex-shrink-0">
-            <!-- Input kutusu da tamamen karanlık ve keskin köşeli -->
             <form id="mesaj-formu" onsubmit="mesajGonder(event)" class="bg-[#252a27] border border-[#333a36] flex items-center px-4 py-3 gap-4 focus-within:border-emerald-500 transition-colors">
                 <input id="mesaj-girdisi" type="text" placeholder="Buraya bir şeyler yazın..." class="bg-transparent flex-1 focus:outline-none text-gray-200 placeholder-gray-600 text-sm" autocomplete="off">
-                <button type="submit" class="text-[#cb37ff] font-bold text-sm hover:text-[#b53fff] transition-colors">Gönder</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT: Mesaj gönderme mantığı -->
-    <script>
-        function mesajGonder(event) {
-            event.preventDefault();
-            
-            const girdi = document.getElementById('mesaj-girdisi');
-            const chatPenceresi = document.getElementById('chat-penceresi');
-            
-            if (girdi.value.trim() === "") return;
-
-            // Yeni mesaj tasarımı (Koyu temaya tam uyumlu beyaz/gri kutu yerine koyu yeşil-gri kutu)
-            const yeniMesaj = `
-                <div class="flex items-start gap-4 p-3 bg-[#202422] border border-[#2d3330]">
-                    <div class="w-10 h-10 bg-[#3a3a4a] text-purple-300 font-bold flex items-center justify-center flex-shrink-0">T</div>
-                    <div>
-                        <div class="flex items-baseline gap-2">
-                            <span class="font-bold text-gray-200">Tunahan</span>
-                            <span class="text-xs text-gray-500">Şimdi</span>
-                        </div>
-                        <p class="text-gray-300 text-sm mt-1">${girdi.value}</p>
-                    </div>
-                </div>
-            `;
-
-            chatPenceresi.innerHTML += yeniMesaj;
-            girdi.value = "";
-            chatPenceresi.scrollTop = chatPenceresi.scrollHeight;
-        }
-    </script>
-</body>
-</html>
+                <button type="submit" class="text-[#cb37ff] font-bold text-sm hover:text
