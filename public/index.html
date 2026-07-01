@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özel Ekip Paneli 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Koyu temaya uygun karanlık kaydırma çubuğu */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1c1e; }
+        ::-webkit-scrollbar-thumb { background: #2d3135; }
+    </style>
+</head>
+<body class="bg-[#121315] text-gray-300 font-sans flex h-screen overflow-hidden select-none">
+
+    <div id="giris-modal" class="fixed inset-0 bg-[#121315]/95 flex items-center justify-center z-50">
+        <div class="bg-[#1e221f] border border-[#333a36] p-6 w-80 text-center shadow-2xl rounded border-t-4 border-t-[#b53fff]">
+            <h2 class="text-emerald-400 font-bold text-lg tracking-wide mb-2">PORNOCULAR MEYDANI</h2>
+            <p class="text-xs text-gray-500 mb-5">Sohbete ve ses odalarına katılmak için bir isim girin.</p>
+            <form onsubmit="girisYap(event)">
+                <input id="modal-isim-girdisi" type="text" placeholder="Kullanıcı adınız..." class="w-full bg-[#252a27] border border-[#333a36] px-3 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-[#b53fff] transition-colors mb-4" autocomplete="off" required>
+                <button type="submit" class="w-full bg-[#b53fff] hover:bg-[#a00aff] text-white font-bold py-2 px-4 text-sm transition-colors shadow-lg shadow-purple-950/50">
+                    Giriş Yap
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="w-56 bg-[#141d17] flex flex-col flex-shrink-0 border-r border-[#1f2e24]">
+        <div class="h-14 border-b border-[#1f2e24] flex items-center px-4 font-bold text-emerald-400 tracking-wide text-sm">
+            PORNOCULAR MEYDANI
+        </div>
+        
+        <div class="p-3 flex-shrink-0">
+            <button id="ses-aksiyon-btn" onclick="sesKanaliTogla()" class="w-full bg-[#b53fff] hover:bg-[#a00aff] text-white font-bold py-3 px-2 text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-purple-950/50">
+                <span id="ses-btn-ikon">🔊</span> <span id="ses-btn-metin">SESE KATIL</span>
+            </button>
+        </div>
+
+        <div class="flex-1 px-3 py-2 overflow-y-auto space-y-2">
+            <div class="text-[11px] font-bold text-emerald-600/70 uppercase tracking-wider px-2">Ses Kanalları</div>
+            <div class="bg-[#18221b]/40 border border-[#1f2e24]/40 p-2 rounded">
+                <div class="flex items-center text-sm font-semibold text-gray-300 gap-2 cursor-pointer hover:text-white transition-colors">
+                    <span>🔊</span> Sesli Oda 1
+                </div>
+                <div id="ses-aktif-kullanicilar" class="mt-2 pl-5 space-y-1.5"></div>
+            </div>
+        </div>
+
+        <div id="ses-kontrol-paneli" class="hidden bg-[#18221b] border-t border-[#1f2e24] px-3 py-2 flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 text-xs text-emerald-400 font-bold">
+                    <span class="animate-pulse">🟢</span> Ses Bağlandı
+                </div>
+                <div class="text-[9px] text-emerald-600 font-mono">RTC Hazır</div>
+            </div>
+            <div class="flex gap-1 bg-[#111813] p-1 rounded border border-[#1f2e24]/50">
+                <button id="mic-btn" onclick="mikrofonTogla()" class="flex-1 py-1 text-center text-sm bg-transparent text-gray-400 hover:text-white hover:bg-[#1a261e] rounded transition-all">
+                    🎤 <span class="text-[10px] block text-gray-500 font-sans font-normal">Açık</span>
+                </button>
+                <button id="deafen-btn" onclick="kulaklikTogla()" class="flex-1 py-1 text-center text-sm bg-transparent text-gray-400 hover:text-white hover:bg-[#1a261e] rounded transition-all">
+                    🎧 <span class="text-[10px] block text-gray-500 font-sans font-normal">Açık</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="h-16 bg-[#1a241e] flex items-center justify-between px-3 gap-2 border-t border-[#25382b] flex-shrink-0">
+            <div class="flex items-center gap-2 min-w-0">
+                <div id="profil-avatar" class="w-9 h-9 bg-[#3a3a4a] text-sm font-bold text-purple-300 flex items-center justify-center flex-shrink-0">
+                    -
+                </div>
+                <div class="min-w-0">
+                    <div id="profil-adi" class="text-sm font-bold text-gray-200 truncate">Giriş Yapılmadı</div>
+                    <div class="text-xs text-emerald-500 truncate">● Çevrimiçi</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-1 text-gray-400">
+                <button class="hover:bg-[#25382b] hover:text-white p-1.5 cursor-pointer transition-colors">🎤</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-1 bg-[#161917] flex flex-col h-full">
+        <div class="h-14 border-b border-[#0b0c0d] flex items-center px-5 font-bold text-gray-200 gap-2 flex-shrink-0 bg-[#1e221f]">
+            <span>💬 Ortak Sohbet</span>
+        </div>
+
+        <div id="chat-penceresi" class="flex-1 overflow-y-auto p-5 space-y-4">
+            <div class="flex items-start gap-4 p-3 bg-[#202422] border border-[#2d3330] mr-auto max-w-[85%] rounded">
+                <div class="w-10 h-10 bg-[#333a36] text-emerald-400 font-bold flex items-center justify-center flex-shrink-0">⚙️</div>
+                <div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-bold text-gray-200">Sistem</span>
+                        <span class="text-xs text-gray-500">Şimdi</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-1">Sistem aktif. Giriş ekranı sorunları düzeltildi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="yaziyor-kutusu" class="text-xs text-gray-500 italic px-5 pb-1 bg-[#1e221f] min-h-[20px]"></div>
+
+        <div class="p-4 bg-[#1e221f] border-t border-[#2d3330] flex-shrink-0">
+            <form id="mesaj-formu" onsubmit="mesajGonder(event)" class="bg-[#252a27] border border-[#333a36] flex items-center px-4 py-3 gap-4 focus-within:border-emerald-500 transition-colors">
+                <input id="mesaj-girdisi" type="text" placeholder="Buraya bir şeyler yazın..." class="bg-transparent flex-1 focus:outline-none text-gray-200 placeholder-gray-600 text-sm" autocomplete="off">
+                <button type="submit" class="text-[#cb37ff] font-bold text-sm hover:text-[#b53fff] transition-colors">Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        // İsmi hafızada tutacak küresel değişkenimiz
+        let kullaniciAdi = "";
+
+        // 🚪 YENİ GİRİŞ MANTIĞI (PROMPT YERİNE BURASI ÇALIŞIR)
+        function girisYap(event) {
+            event.preventDefault();
+            const modalInput = document.getElementById('modal-isim-girdisi');
+            let isim = modalInput.value.trim();
+
+            // Eğer bir hata olur da boş kalırsa koruma devresi
+            if (!isim) {
+                isim = "Kullanıcı_" + Math.floor(Math.random() * 100);
+            }
+
+            kullaniciAdi = isim;
+
+            // Sunucuya bağlandığımızı bildiriyoruz
+            socket.emit('kullanici-katildi', kullaniciAdi);
+            
+            // Profil alanını dolduruyoruz
+            document.getElementById('profil-adi').textContent = kullaniciAdi;
+            document.getElementById('profil-avatar').textContent = kullaniciAdi.charAt(0).toUpperCase();
+
+            // Giriş başarılı olunca modal ekranını gizliyoruz
+            document.getElementById('giris-modal').classList.add('hidden');
+        }
+
+        const girdi = document.getElementById('mesaj-girdisi');
+        const chatPenceresi = document.getElementById('chat-penceresi');
+        const yaziyorKutusu = document.getElementById('yaziyor-kutusu');
+
+        // LOCAL SES DURUMLARI
+        let sesteMiyim = false; let micAcik = true; let kulaklikAcik = true;
+
+        // 🎙️ SESE KATIL / AYRIL
+        function sesKanaliTogla() {
+            if (!kullaniciAdi) return; // Giriş yapmadıysa çalışma
+            sesteMiyim = !sesteMiyim;
+            const sesBtn = document.getElementById('ses-aksiyon-btn');
+            const sesBtnIkon = document.getElementById('ses-btn-ikon');
+            const sesBtnMetin = document.getElementById('ses-btn-metin');
+            const sesKontrolPaneli = document.getElementById('ses-kontrol-paneli');
+
+            if (sesteMiyim) {
+                sesBtn.className = "w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-2 text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-red-950/50";
+                sesBtnIkon.textContent = "❌"; sesBtnMetin.textContent = "SESTEN AYRIL";
+                sesKontrolPaneli.classList.remove('hidden');
+                socket.emit('sese-katil', { isim: kullaniciAdi, micAcik, kulaklikAcik });
+            } else {
+                sesBtn.className = "w-full bg-[#b53fff] hover:bg-[#a00aff] text-white font-bold py-3 px-2 text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-purple-950/50";
+                sesBtnIkon.textContent = "🔊"; sesBtnMetin.textContent = "SESE KATIL";
+                sesKontrolPaneli.classList.add('hidden');
+                socket.emit('sesten-ayril');
+                micAcik = true; kulaklikAcik = true; gorselGuncelleMic(); gorselGuncelleKulaklik();
+            }
+        }
+
+        // 🎙️ MİKROFON / KULAKLIK KONTROLLERİ
+        function mikrofonTogla() {
+            micAcik = !micAcik; gorselGuncelleMic();
+            if (sesteMiyim) socket.emit('ses-durumu-guncelle', { micAcik, kulaklikAcik });
+        }
+        function kulaklikTogla() {
+            kulaklikAcik = !kulaklikAcik; gorselGuncelleKulaklik();
+            if (sesteMiyim) socket.emit('ses-durumu-guncelle', { micAcik, kulaklikAcik });
+        }
+
+        function gorselGuncelleMic() {
+            const btn = document.getElementById('mic-btn');
+            if (micAcik) { btn.innerHTML = '🎤 <span class="text-[10px] block text-gray-500 font-sans font-normal">Açık</span>'; btn.className = "flex-1 py-1 text-center text-sm bg-transparent text-gray-400 hover:text-white hover:bg-[#1a261e] rounded transition-all"; }
+            else { btn.innerHTML = '🔇 <span class="text-[10px] block text-red-400 font-sans font-bold">Kapalı</span>'; btn.className = "flex-1 py-1 text-center text-sm bg-red-950/40 text-red-400 border border-red-900/50 rounded transition-all"; }
+        }
+        function gorselGuncelleKulaklik() {
+            const btn = document.getElementById('deafen-btn');
+            if (kulaklikAcik) { btn.innerHTML = '🎧 <span class="text-[10px] block text-gray-500 font-sans font-normal">Açık</span>'; btn.className = "flex-1 py-1 text-center text-sm bg-transparent text-gray-400 hover:text-white hover:bg-[#1a261e] rounded transition-all"; }
+            else { btn.innerHTML = '❌ <span class="text-[10px] block text-red-400 font-sans font-bold">Sağır</span>'; btn.className = "flex-1 py-1 text-center text-sm bg-red-950/40 text-red-400 border border-red-900/50 rounded transition-all"; }
+        }
+
+        // 🎙️ SES LISTESI UPDATE DONGUSU
+        socket.on('ses-kullanicilari-guncelle', (sesListesi) => {
+            const aktifSesKutusu = document.getElementById('ses-aktif-kullanicilar');
+            aktifSesKutusu.innerHTML = '';
+            Object.keys(sesListesi).forEach(id => {
+                const user = sesListesi[id];
+                const ilkHarf = user.isim.charAt(0).toUpperCase();
+                const gosterilecekIsim = user.isim === kullaniciAdi ? "Siz" : user.isim;
+                const userHtml = `
+                    <div class="flex items-center gap-2 text-xs text-gray-400 bg-[#1e2b22]/30 p-1 rounded">
+                        <div class="w-4 h-4 bg-[#3a3a4a] text-[10px] font-bold text-purple-300 flex items-center justify-center rounded-sm">${ilkHarf}</div>
+                        <span class="truncate font-medium">${gosterilecekIsim}</span>
+                        <div class="flex gap-0.5 ml-auto text-[9px]">
+                            <span class="${user.micAcik ? 'hidden' : ''}">🔇</span>
+                            <span class="${user.kulaklikAcik ? 'hidden' : ''}">❌</span>
+                        </div>
+                    </div>`;
+                aktifSesKutusu.innerHTML += userHtml;
+            });
+        });
+
+        // ✍️ YAZIYOR SİNYALİ
+        let yaziyorTimeout;
+        girdi.addEventListener('input', () => {
+            if (!kullaniciAdi) return;
+            socket.emit('yaziyor-sinyali', { isim: kullaniciAdi, durum: true });
+            clearTimeout(yaziyorTimeout);
+            yaziyorTimeout = setTimeout(() => {
+                socket.emit('yaziyor-sinyali', { isim: kullaniciAdi, durum: false });
+            }, 1500);
+        });
+        socket.on('kullanici-yaziyor', (veri) => {
+            yaziyorKutusu.textContent = veri.durum ? `${veri.isim} yazıyor...` : '';
+        });
+
+        // 📢 SİSTEM REPORLARI
+        socket.on('sistem-mesaji', (metin) => {
+            const simdi = new Date(); const saatBilgisi = String(simdi.getHours()).padStart(2, '0') + ':' + String(simdi.getMinutes()).padStart(2, '0');
+            const sistemHtml = `<div class="flex items-start gap-4 p-3 bg-[#1b1e1c] border border-[#252a27] mr-auto max-w-[85%] rounded"><div class="w-10 h-10 bg-[#252a27] text-amber-500 font-bold flex items-center justify-center flex-shrink-0">📢</div><div><div class="flex items-baseline gap-2"><span class="font-bold text-amber-500 text-sm">Sistem</span><span class="text-xs text-gray-500">${saatBilgisi}</span></div><p class="text-gray-400 text-sm mt-1">${metin}</p></div></div>`;
+            chatPenceresi.innerHTML += sistemHtml; chatPenceresi.scrollTop = chatPenceresi.scrollHeight;
+        });
+
+        // 💬 MESAJLAŞMA ALANI
+        function mesajGonder(event) {
+            event.preventDefault(); if (!kullaniciAdi) return;
+            const mesajMetni = girdi.value.trim(); if (mesajMetni === "") return;
+            socket.emit('mesaj-gonder', { isim: kullaniciAdi, metin: mesajMetni });
+            socket.emit('yaziyor-sinyali', { isim: kullaniciAdi, durum: false }); girdi.value = "";
+        }
+        socket.on('mesaj-al', (veri) => {
+            const ilkHarf = veri.isim.charAt(0).toUpperCase(); const bendemi = veri.isim === kullaniciAdi; const gosterilecekIsim = bendemi ? "Siz" : veri.isim;
+            const simdi = new Date(); const saatBilgisi = String(simdi.getHours()).padStart(2, '0') + ':' + String(simdi.getMinutes()).padStart(2, '0');
+            let yeniMesajHtml = "";
+            if (bendemi) {
+                yeniMesajHtml = `<div class="flex items-start gap-4 p-3 bg-[#261d2e] border border-[#3b2d47] flex-row-reverse ml-auto max-w-[80%] rounded-l-lg rounded-br-none"><div class="w-10 h-10 bg-[#b53fff] text-white font-bold flex items-center justify-center flex-shrink-0 shadow-md shadow-purple-900/30">${ilkHarf}</div><div class="text-right"><div class="flex items-baseline justify-end gap-2"><span class="text-xs text-gray-500">${saatBilgisi}</span><span class="font-bold text-purple-300">${gosterilecekIsim}</span></div><p class="text-gray-200 text-sm mt-1 break-all">${veri.metin}</p></div></div>`;
+            } else {
+                yeniMesajHtml = `<div class="flex items-start gap-4 p-3 bg-[#202422] border border-[#2d3330] mr-auto max-w-[80%] rounded-r-lg rounded-bl-none"><div class="w-10 h-10 bg-[#3a3a4a] text-purple-300 font-bold flex items-center justify-center flex-shrink-0">${ilkHarf}</div><div><div class="flex items-baseline gap-2"><span class="font-bold text-gray-200">${gosterilecekIsim}</span><span class="text-xs text-gray-500">${saatBilgisi}</span></div><p class="text-gray-300 text-sm mt-1 break-all">${veri.metin}</p></div></div>`;
+            }
+            chatPenceresi.innerHTML += yeniMesajHtml; chatPenceresi.scrollTop = chatPenceresi.scrollHeight;
+        });
+    </script>
+</body>
+</html>
